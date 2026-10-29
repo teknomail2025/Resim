@@ -1,0 +1,10 @@
+{
+  "name": "GörselÇevir - Resim Üzerinde Anında Çeviri",
+  "description": "Yüklediğiniz fotoğraflardaki yabancı metinleri algılayıp doğrudan görsel üzerinde orijinal tasarımına uygun olarak Türkçe'ye çevirir.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

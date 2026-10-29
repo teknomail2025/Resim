@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Silence Vite HMR WebSocket connection errors in sandboxed iframe environment
+      (function() {
+        if (typeof window !== 'undefined') {
+          // Wrap console.error to filter out the Vite WebSocket error
+          var origError = console.error;
+          console.error = function() {
+            var msg = Array.prototype.slice.call(arguments).map(function(a) {
+              return (a && a.stack) ? a.stack : String(a || '');
+            }).join(' ');
+            if (msg.indexOf('WebSocket') !== -1 || msg.indexOf('@vite/client') !== -1) {
+              return;
+            }
+            origError.apply(console, arguments);
+          };
+
+          // Wrap window.WebSocket to suppress unhandled error bubbles
+          if (window.WebSocket) {
+            var OrigWS = window.WebSocket;
+            window.WebSocket = function(url, protocols) {
+              var ws;
+              try {
+                ws = protocols ? new OrigWS(url, protocols) : new OrigWS(url);
+              } catch (e) {
+                // Return dummy event target if constructor fails
+                ws = { addEventListener: function() {}, removeEventListener: function() {}, close: function() {}, send: function() {} };
+                return ws;
+              }
+              ws.addEventListener('error', function(e) {
+                if (e && e.stopImmediatePropagation) e.stopImmediatePropagation();
+              });
+              return ws;
+            };
+            window.WebSocket.prototype = OrigWS.prototype;
+          }
+
+          window.addEventListener('error', function(event) {
+            var msg = event && (event.message || '');
+            var filename = event && (event.filename || '');
+            if (msg.indexOf('WebSocket') !== -1 || filename.indexOf('@vite/client') !== -1) {
+              event.stopImmediatePropagation();
+              event.preventDefault();
+              return true;
+            }
+          }, true);
+
+          window.addEventListener('unhandledrejection', function(event) {
+            var reason = event && (event.reason ? (event.reason.message || event.reason.stack || String(event.reason)) : '');
+            if (reason.indexOf('WebSocket') !== -1 || reason.indexOf('@vite/client') !== -1) {
+              event.stopImmediatePropagation();
+              event.preventDefault();
+              return true;
+            }
+          }, true);
+        }
+      })();
+    </script>
+    <title>GörselÇevir - Resim Üzerinde Anında Çeviri</title>
+    <meta name="description" content="Yüklediğiniz fotoğraflardaki yabancı metinleri algılayıp doğrudan görsel üzerinde orijinal tasarımına uygun olarak Türkçe'ye çevirir." />
+    <meta property="og:title" content="GörselÇevir - Resim Üzerinde Anında Çeviri" />
+    <meta property="og:description" content="Yüklediğiniz fotoğraflardaki yabancı metinleri algılayıp doğrudan görsel üzerinde orijinal tasarımına uygun olarak Türkçe'ye çevirir." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#0b0f19" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="GörselÇevir" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bangers&family=Caveat:wght@600;700&family=Comic+Neue:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Oswald:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Roboto+Slab:wght@400;600;700;800&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap&subset=latin,latin-ext" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bangers&family=Caveat:wght@600;700&family=Comic+Neue:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Oswald:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Roboto+Slab:wght@400;600;700;800&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap&subset=latin,latin-ext" rel="stylesheet">
+    </noscript>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
